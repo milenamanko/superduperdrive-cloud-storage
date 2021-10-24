@@ -14,6 +14,7 @@ import java.util.Base64;
 
 @Service
 public class EncryptionService {
+
     private Logger logger = LoggerFactory.getLogger(EncryptionService.class);
 
     public String encryptValue(String data, String key) {

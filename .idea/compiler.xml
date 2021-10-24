@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="15">
-      <module name="cloudstorage" target="8" />
+      <module name="cloudstorage" target="15" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
