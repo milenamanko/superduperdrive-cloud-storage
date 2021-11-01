@@ -14,7 +14,7 @@ public class File {
 
     private Integer userId;
 
-    private Blob fileData;
+    private byte[] fileData;
 
     public Integer getFileId() {
         return fileId;
@@ -56,11 +56,11 @@ public class File {
         this.userId = userId;
     }
 
-    public Blob getFileData() {
+    public byte[] getFileData() {
         return fileData;
     }
 
-    public void setFileData(Blob fileData) {
+    public void setFileData(byte[] fileData) {
         this.fileData = fileData;
     }
 }

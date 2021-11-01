@@ -26,7 +26,6 @@ public class SignupController {
 
     @PostMapping
     public String signupUser(@ModelAttribute User user, Model model) {
-
         String signupError = "";
 
         if (!userService.isUserNameAvailable(user.getUsername())) {
@@ -42,7 +41,7 @@ public class SignupController {
         }
 
         if (signupError.equals("")) {
-            model.addAttribute("singupSuccess", true);
+            model.addAttribute("signupSuccess", true);
         } else {
             model.addAttribute("signupError", signupError);
         }

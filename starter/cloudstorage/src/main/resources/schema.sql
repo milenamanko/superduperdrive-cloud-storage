@@ -34,3 +34,5 @@ CREATE TABLE IF NOT EXISTS CREDENTIALS (
     userid INT,
     foreign key (userid) references USERS(userid)
 );
+
+INSERT INTO users VALUES (1, 'milen', 'vMixWgSqwtU2UJDtzqvpUQ==', '0+LxDVU9BlQCn0fHzjVY5Q==', 'm', 'm');

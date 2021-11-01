@@ -11,9 +11,10 @@
     <body class="p-3 mb-2 bg-light text-black">
         <div class="container justify-content-center w-25 p-3" style="background-color: #eeeeee; margin-top: 5em;">
             <h1 class="display-5">Login</h1>
-            <form action="#" method="POST">
+            <form action="#" th:action="@{/login}" method="post">
                 <div id="error-login-msg" th:if="${loginError}" class="alert alert-danger">
-                    <span th:text="${loginError}"></span>
+                    <span th:text="${loginError}">
+                    </span>
                 </div>
                 <div id="success-logout-msg" th:if="${logoutSuccess}" class="alert alert-dark">
                     You have been logged out
@@ -30,7 +31,7 @@
             </form>
 
             <div class="form-group" style="margin-top: 0.5em;">
-                <label><a>Click here to sign up</a></label>
+                <label><a id="signup-link" th:href="@{/signup}">Click here to sign up</a></label>
             </div>
         </div>
     </body>
