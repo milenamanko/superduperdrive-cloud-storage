@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class SecurityService {
 
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public SecurityService(AuthenticationService authenticationService, UserMapper userMapper) {
         this.authenticationService = authenticationService;
