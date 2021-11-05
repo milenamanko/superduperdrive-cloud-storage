@@ -13,14 +13,11 @@ public interface FilesMapper {
     @Select("SELECT * FROM FILES WHERE fileid = #{fileId}")
     File getFile(Integer fileId);
 
-    @Select("SELECT COUNT(*) FROM FILES WHERE filename = #{filename}")
-    int getFileCount(String filename);
-
-    @Select("SELECT * FROM FILES WHERE filename = #{filename}")
-    Resource getFileAsResource(String filename);
-
     @Select("SELECT * FROM FILES WHERE userid = #{userId}")
     List<File> getAllFiles(Integer userId);
+
+    @Select("SELECT COUNT(*) FROM FILES WHERE filename = #{filename}")
+    int getFileCount(String filename);
 
     @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata)" +
             "VALUES (#{filename}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")

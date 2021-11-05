@@ -18,6 +18,10 @@ public class FileService {
         this.filesMapper = filesMapper;
     }
 
+    public File getFileById(Integer fileId) {
+        return filesMapper.getFile(fileId);
+    }
+
     public List<File> getAllFilesByUserId(Integer userId) {
         return filesMapper.getAllFiles(userId);
     }
@@ -29,17 +33,8 @@ public class FileService {
         return filesMapper.insertFile(file);
     }
 
-    public Resource getFileAsResource(String filename) {
-
-        return filesMapper.getFileAsResource(filename);
-    }
-
     public int deleteFileById(Integer fileId) {
         return filesMapper.deleteFile(fileId);
-    }
-
-    public File getFileById(Integer fileId) {
-        return filesMapper.getFile(fileId);
     }
 
     public int getFileCountByName(String filename) {

@@ -1,8 +1,9 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.dto.FileDTO;
-import com.udacity.jwdnd.course1.cloudstorage.model.File;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
+import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping
@@ -25,9 +24,12 @@ public class HomeController {
 
     private final FileService fileService;
 
-    public HomeController(UserService userService, FileService fileService) {
+    private final NoteService noteService;
+
+    public HomeController(UserService userService, FileService fileService, NoteService noteService) {
         this.userService = userService;
         this.fileService = fileService;
+        this.noteService = noteService;
     }
 
     @ModelAttribute("fileDTO")
@@ -38,7 +40,10 @@ public class HomeController {
     @GetMapping("/home")
     public String homePage(Model model, Authentication authentication, @ModelAttribute("fileDTO") MultipartFile file) {
 
-        model.addAttribute("files", fileService.getAllFilesByUserId(userService.getUser(authentication.getName()).getUserId()));
+        Integer loggedUserId = userService.getUser(authentication.getName()).getUserId();
+
+        model.addAttribute("files", fileService.getAllFilesByUserId(loggedUserId));
+        model.addAttribute("notes", noteService.getAllNotesByUserId(loggedUserId));
 
         return "home";
     }

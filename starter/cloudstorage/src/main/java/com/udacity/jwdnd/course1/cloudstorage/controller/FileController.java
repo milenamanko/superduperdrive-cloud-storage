@@ -5,9 +5,7 @@ import com.udacity.jwdnd.course1.cloudstorage.mapper.UserMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
-import org.hibernate.validator.constraintvalidation.HibernateConstraintValidator;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -40,14 +37,6 @@ public class FileController {
     public FileDTO getFileDTO() {
         return new FileDTO();
     }
-
-//    @GetMapping("/home/files")
-//    public String listUploadedFiles(Model model, Authentication authentication) throws IOException {
-//
-//        model.addAttribute("file", fileService.getAllFilesByUserId(userService.getUser(authentication.getName()).getUserId()));
-//
-//        return "home";
-//    }
 
     @PostMapping("/home/file/newFile")
     public String uploadFile(Authentication authentication, Model model, @ModelAttribute("fileDTO") MultipartFile file) throws IOException {
@@ -71,9 +60,9 @@ public class FileController {
         }
 
         if (fileError.equals("")) {
-            model.addAttribute("fileSuccess", "File has been uploaded successfully.");
+            model.addAttribute("successMsg", "File has been uploaded successfully.");
         } else {
-            model.addAttribute("fileError", fileError);
+            model.addAttribute("errorMsg", fileError);
         }
 
         return "result";
@@ -84,7 +73,6 @@ public class FileController {
     @ResponseBody
     public ResponseEntity<InputStreamResource> serveFile(@PathVariable Integer fileId) throws IOException, SQLException {
 
-//        Resource file = fileService.getFileAsResource(filename);
         File file = fileService.getFileById(fileId);
 
         Blob blob = new SerialBlob(file.getFileData());
@@ -117,9 +105,9 @@ public class FileController {
         }
 
         if (deleteError.equals("")) {
-            model.addAttribute("fileSuccess", "File has been deleted successfully.");
+            model.addAttribute("successMsg", "File has been deleted successfully.");
         } else {
-            model.addAttribute("fileError", deleteError);
+            model.addAttribute("errorMsg", deleteError);
         }
 
         return "result";

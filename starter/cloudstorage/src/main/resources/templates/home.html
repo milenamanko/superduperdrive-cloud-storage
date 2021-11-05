@@ -63,6 +63,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
+                        <form action="#" th:action="@{/home/note/newNote}" enctype="multipart/form-data" method="POST">
                         <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
                             + Add a New Note
                         </button>
@@ -77,13 +78,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr th:id="${note.noteId}" th:each="note:${notes}">
                                         <td>
-                                            <button type="button" class="btn btn-success">Edit</button>
-                                            <a class="btn btn-danger">Delete</a>
+                                            <button type="button" class="btn btn-success" th:href="@{/home/note/{noteId}(noteId=${note.noteId})}">Edit</button>
+                                            <a class="btn btn-danger" th:href="@{/home/note/delete/{noteId}(noteId=${note.noteId})}">Delete</a>
                                         </td>
-                                        <th scope="row">Example Note Title</th>
-                                        <td>Example Note Description </td>
+                                        <th scope="row" th:text="${note.noteTitle}">Example Note Title</th>
+                                        <td scope="row" th:text="${note.noteDescription}">Example Note Description </td>
                                     </tr>
                                 </tbody>
                             </table>
