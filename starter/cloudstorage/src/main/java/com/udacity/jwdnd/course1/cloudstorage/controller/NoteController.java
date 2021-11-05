@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.io.IOException;
-
 @Controller
 public class NoteController {
 
@@ -26,27 +24,46 @@ public class NoteController {
     }
 
     @PostMapping("/home/note/newNote")
-    public String uploadNote(Authentication authentication, Model model, Note note) throws IOException {
+    public String uploadNote(Authentication authentication, Model model, Note note) {
 
         String noteError = "";
 
-        if (note.getNoteTitle().equals("")) {
-            noteError = "Please specify note title.";
-        }
+        if (note.getNoteId() == null) {
+            //add note if new
 
-        if (noteError.equals("")) {
-
-            note.setUserId(userService.getUser(authentication.getName()).getUserId());
-            int noteCount = noteService.addNote(note);
-            if (noteCount < 1) {
-                noteError = "An error has occurred while adding note. Please try again.";
+            if (note.getNoteTitle().equals("")) {
+                noteError = "Please specify note title.";
             }
-        }
 
-        if (noteError.equals("")) {
-            model.addAttribute("successMsg", "Note has been added successfully.");
+            if (noteError.equals("")) {
+
+                note.setUserId(userService.getUser(authentication.getName()).getUserId());
+
+                int noteCount = noteService.addNote(note);
+                if (noteCount < 1) {
+                    noteError = "An error has occurred while adding note. Please try again.";
+                }
+            }
+
+            if (noteError.equals("")) {
+                model.addAttribute("successMsg", "Note has been added successfully.");
+            } else {
+                model.addAttribute("errorMsg", noteError);
+            }
         } else {
-            model.addAttribute("errorMsg", noteError);
+            //update note if ID exists
+
+            int noteCount = noteService.updateNote(note);
+
+            if (noteCount < 1) {
+                noteError = "An error has occurred while saving edit. Please try again.";
+            }
+
+            if (noteError.equals("")) {
+                model.addAttribute("successMsg", "Note has been updated successfully.");
+            } else {
+                model.addAttribute("errorMsg", noteError);
+            }
         }
 
         return "result";
@@ -63,7 +80,7 @@ public class NoteController {
 
         if (noteError.equals("")) {
 
-            int noteCount = noteService.deleteNote(noteId);
+            int noteCount = noteService.deleteNoteById(noteId);
             if (noteCount < 1) {
                 noteError = "An error has occurred while deleting. Please try again.";
             }
