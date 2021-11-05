@@ -11,7 +11,10 @@ import java.util.List;
 public interface FilesMapper {
 
     @Select("SELECT * FROM FILES WHERE fileid = #{fileId}")
-    File getFileById(Integer fileId);
+    File getFile(Integer fileId);
+
+    @Select("SELECT COUNT(*) FROM FILES WHERE filename = #{filename}")
+    int getFileCount(String filename);
 
     @Select("SELECT * FROM FILES WHERE filename = #{filename}")
     Resource getFileAsResource(String filename);
@@ -22,7 +25,7 @@ public interface FilesMapper {
     @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata)" +
             "VALUES (#{filename}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
-    void insertFile(File file);
+    int insertFile(File file);
 
     @Update("UPDATE FILES SET filename = #{filename} WHERE fileid = #{fileId}")
     int updateFileName(String filename, Integer fileId);

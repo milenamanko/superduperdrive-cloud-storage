@@ -13,11 +13,13 @@
             <div class="alert alert-success fill-parent" th:if="${fileSuccess}">
 
                 <h1 class="display-5">Success</h1>
-                <span>Your changes were successfully saved. Click <a href="/home">here</a> to continue.</span>
+                <span th:text="${fileSuccess}"></span>
+                <span>Click <a href="/home">here</a> to continue.</span>
             </div>
             <div class="alert alert-danger fill-parent" th:if="${fileError}">
                 <h1 class="display-5">Error</h1>
-                <span>Your changes were not saved. Click <a href="/home">here</a> to continue.</span>
+                <span th:text="${fileError}"></span>
+                <span>Click <a href="/home">here</a> to continue.</span>
             </div>
         </div>
     </body>
