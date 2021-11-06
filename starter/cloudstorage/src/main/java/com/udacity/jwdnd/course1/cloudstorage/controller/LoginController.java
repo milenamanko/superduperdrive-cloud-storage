@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LoginController {
@@ -12,12 +13,14 @@ public class LoginController {
     private final SecurityService securityService;
 
     @Autowired
-    public LoginController( SecurityService securityService) {
+    public LoginController(SecurityService securityService) {
         this.securityService = securityService;
     }
 
     @GetMapping("/login")
     public String login(Model model, String error) {
+
+        model.addAttribute("newLogin", true);
 
         if (securityService.isAuthenticated()) {
             return "home";

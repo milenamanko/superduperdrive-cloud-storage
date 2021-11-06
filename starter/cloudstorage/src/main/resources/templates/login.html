@@ -10,7 +10,8 @@
     </head>
     <body class="p-3 mb-2 bg-light text-black">
         <div class="container justify-content-center w-25 p-3" style="background-color: #eeeeee; margin-top: 5em;">
-            <h1 class="display-5">Login</h1>
+            <h1 th:if="${newLogin}" class="display-5">Login</h1>
+            <h1 th:if="${logoutSuccess}" class="display-5">Logout</h1>
             <form action="#" th:action="@{/login}" method="post">
                 <div id="error-login-msg" th:if="${loginError}" class="alert alert-danger">
                     <span th:text="${loginError}">
@@ -19,20 +20,24 @@
                 <div id="success-logout-msg" th:if="${logoutSuccess}" class="alert alert-dark">
                     You have been logged out
                 </div>
-                <div class="form-group">
+                <div th:if="${newLogin}" class="form-group">
                     <label for="inputUsername">Username</label>
                     <input type="input" class="form-control" name="username" id="inputUsername" placeholder="Enter Username" maxlength="20" required>
                 </div>
-                <div class="form-group">
+                <div th:if="${newLogin}" class="form-group">
                     <label for="inputPassword">Password</label>
                     <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Enter Password" maxlength="20" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button th:if="${newLogin}" id="submit-login-button" type="submit" class="btn btn-primary">Login</button>
             </form>
+            <div th:if="${logoutSuccess}" class="form-group" style="margin-top: 0.5em;">
+                <label><a id="login-link" th:href="@{/login}">Click here to login again</a></label>
+            </div>
 
             <div class="form-group" style="margin-top: 0.5em;">
                 <label><a id="signup-link" th:href="@{/signup}">Click here to sign up</a></label>
             </div>
+
         </div>
     </body>
 </html>
