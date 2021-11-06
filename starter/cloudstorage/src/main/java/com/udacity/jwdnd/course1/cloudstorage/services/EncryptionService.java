@@ -36,6 +36,8 @@ public class EncryptionService {
     public String decryptValue(String data, String key) {
         byte[] decryptedValue = null;
 
+//        String value;
+
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
@@ -46,6 +48,11 @@ public class EncryptionService {
             logger.error(e.getMessage());
         }
 
+//        if (decryptedValue == null) {
+//            value = "";
+//        } else {
+//            value = new String(decryptedValue);
+//        }
         return new String(decryptedValue);
     }
 }
