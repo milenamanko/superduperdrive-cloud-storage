@@ -31,24 +31,12 @@ public class CredentialController {
         if (credential.getCredentialId() == null) {
             //add credential if new
 
-            if (credential.getUrl().equals("")) {
-                credentialError += "Please specify credential URL.";
-            }
-            if (credential.getUsername().equals("")) {
-                credentialError += "Please specify credential username.";
-            }
-            if (credential.getPassword().equals("")) {
-                credentialError += "Please specify credential password.";
-            }
+            credential.setUserId(userService.getUser(authentication.getName()).getUserId());
 
-            if (credentialError.equals("")) {
+            int credentialCount = credentialService.insertCredential(credential, authentication);
 
-                credential.setUserId(userService.getUser(authentication.getName()).getUserId());
-
-                int credentialCount = credentialService.insertCredential(credential, authentication);
-                if (credentialCount < 1) {
-                    credentialError = "An error has occurred while adding credential. Please try again.";
-                }
+            if (credentialCount < 1) {
+                credentialError = "An error has occurred while adding credential. Please try again.";
             }
 
             if (credentialError.equals("")) {

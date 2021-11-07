@@ -1,7 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,12 +12,10 @@ public class HomePageObject {
 
     @FindBy(xpath = ("//div[@id = 'contentDiv']//div[@id = 'nav-tab']//a[@id = 'nav-notes-tab']"))
     private WebElement navNotesTab;
-//
-//    @FindBy(id = "nav-notes-tab")
-//    private WebElement navNotesTab;
-//
-//    @FindBy(id = "nav-credentials-tab")
-//    private WebElement credentialsTab;
+
+    @FindBy(xpath = ("//div[@id = 'contentDiv']//div[@id = 'nav-tab']//a[@id = 'nav-credentials-tab']"))
+    private WebElement navCredentialTab;
+
 
     public HomePageObject(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
@@ -33,7 +29,7 @@ public class HomePageObject {
         navNotesTab.click();
     }
 
-//    public void goToCredentials() {
-//        credentialsTab.click();
-//    }
+    public void goToCredentials() {
+        navCredentialTab.click();
+    }
 }

@@ -1,22 +1,23 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.apache.juli.logging.Log;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class CloudStorageApplicationTests {
 
     private LoginPageObject loginPageObject;
@@ -27,11 +28,7 @@ class CloudStorageApplicationTests {
 
     private NotePageObject notePageObject;
 
-    //login data
-    String firstName = "Frank";
-    String lastName = "Sinatra";
-    String username = "fsinatra";
-    String password = "guineaPig5";
+    private CredentialPageObject credentialPageObject;
 
     @LocalServerPort
     private int port;
@@ -58,12 +55,34 @@ class CloudStorageApplicationTests {
         }
     }
 
+    public void loginToPage() {
+
+        String firstName = "Frank";
+        String lastName = "Sinatra";
+        String username = "fsinatra";
+        String password = "guineaPig5";
+
+        driver.get(baseURL + "/signup");
+
+        signupPageObject = new SignupPageObject(driver);
+        signupPageObject.addData(firstName, lastName, username, password);
+        signupPageObject.submitSignup();
+
+        driver.get(baseURL + "/login");
+
+        loginPageObject = new LoginPageObject(driver);
+        loginPageObject.addData(username, password);
+        loginPageObject.submitLogin();
+    }
+
     @Test
+    @Transactional
     void contextLoads() {
     }
 
     //login and signup tests
     @Test
+    @Transactional
     public void getLoginPage() {
 
         driver.get(baseURL + "/login");
@@ -71,6 +90,7 @@ class CloudStorageApplicationTests {
     }
 
     @Test
+    @Transactional
     public void testUnauthorizedAccess() {
 
         driver.get(baseURL + "/home");
@@ -96,19 +116,10 @@ class CloudStorageApplicationTests {
     }
 
     @Test
+    @Transactional
     public void testSignupLoginLogout() {
 
-        driver.get(baseURL + "/signup");
-
-        signupPageObject = new SignupPageObject(driver);
-        signupPageObject.addData(firstName, lastName, username, password);
-        signupPageObject.submitSignup();
-
-        driver.get(baseURL + "/login");
-
-        loginPageObject = new LoginPageObject(driver);
-        loginPageObject.addData(username, password);
-        loginPageObject.submitLogin();
+        loginToPage();
 
         driver.get(baseURL + "/home");
 
@@ -122,24 +133,14 @@ class CloudStorageApplicationTests {
     }
 
     //note tests
-
     @Test
+    @Transactional
     public void testCreateNote() {
+
+        loginToPage();
 
         String noteTitle = "shopping list";
         String noteDescription = "avocado, banana, potatoes";
-
-        driver.get(baseURL + "/signup");
-
-        signupPageObject = new SignupPageObject(driver);
-        signupPageObject.addData(firstName, lastName, username, password);
-        signupPageObject.submitSignup();
-
-        driver.get(baseURL + "/login");
-
-        loginPageObject = new LoginPageObject(driver);
-        loginPageObject.addData(username, password);
-        loginPageObject.submitLogin();
 
         driver.get(baseURL + "/home");
 
@@ -157,17 +158,31 @@ class CloudStorageApplicationTests {
         homePageObject.goToNotes();
         notePageObject.setWait(driver);
 
-        Assertions.assertEquals(noteTitle, driver.findElement(By.id("note-title-display")).getText());
-        Assertions.assertEquals(noteDescription, driver.findElement(By.id("note-description-display")).getText());
+        Assertions.assertEquals(noteTitle, notePageObject.getDisplayNoteTitle().getText());
+        Assertions.assertEquals(noteDescription, notePageObject.getDisplayNoteDescription().getText());
     }
 
     @Test
+    @Transactional
     public void testEditNote() {
 
+        loginToPage();
+
+        String noteTitle = "shopping list";
+        String noteDescription = "avocado, banana, potatoes";
         String newNoteTitle = "shopping list2";
         String newNoteDescription = "avocado, banana, potatoes, cheese";
 
-        testCreateNote();
+        driver.get(baseURL + "/home");
+
+        homePageObject = new HomePageObject(driver);
+        homePageObject.goToNotes();
+        notePageObject = new NotePageObject(driver);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        notePageObject.clickAddNote();
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        notePageObject.addNote(noteTitle, noteDescription);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 
         driver.get(baseURL + "/home");
 
@@ -182,14 +197,29 @@ class CloudStorageApplicationTests {
         homePageObject.goToNotes();
         notePageObject.setWait(driver);
 
-        Assertions.assertEquals(newNoteTitle, driver.findElement(By.id("note-title-display")).getText());
-        Assertions.assertEquals(newNoteDescription, driver.findElement(By.id("note-description-display")).getText());
+        Assertions.assertEquals(newNoteTitle, notePageObject.getDisplayNoteTitle().getText());
+        Assertions.assertEquals(newNoteDescription, notePageObject.getDisplayNoteDescription().getText());
     }
 
     @Test
+    @Transactional
     public void testDeleteNote() {
 
-        testCreateNote();
+        loginToPage();
+
+        String noteTitle = "shopping list";
+        String noteDescription = "avocado, banana, potatoes";
+
+        driver.get(baseURL + "/home");
+
+        homePageObject = new HomePageObject(driver);
+        homePageObject.goToNotes();
+        notePageObject = new NotePageObject(driver);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        notePageObject.clickAddNote();
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        notePageObject.addNote(noteTitle, noteDescription);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 
         driver.get(baseURL + "/home");
 
@@ -204,7 +234,114 @@ class CloudStorageApplicationTests {
     }
 
     //credential tests
+    @Test
+    @Transactional
+    public void testCreateCredentials() {
 
+        loginToPage();
 
+        String credUrl = "https://www.udacity.com";
+        String credUsername = "franksinatra";
+        String credPassword = "toTheMoon";
 
+        driver.get(baseURL + "/home");
+
+        homePageObject = new HomePageObject(driver);
+        homePageObject.goToCredentials();
+        credentialPageObject = new CredentialPageObject(driver);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        credentialPageObject.clickAddCredential();
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        credentialPageObject.addCredential(credUrl, credUsername, credPassword);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+
+        driver.get(baseURL + "/home");
+
+        homePageObject.goToCredentials();
+        credentialPageObject.setWait(driver);
+
+        Assertions.assertEquals(credUrl, credentialPageObject.getDisplayCredentialUrl().getText());
+        Assertions.assertEquals(credUsername, credentialPageObject.getDisplayCredentialUsername().getText());
+        Assertions.assertNotEquals(credPassword, credentialPageObject.getDisplayCredentialPassword().getText());
+
+    }
+
+    @Test
+    @Transactional
+    public void testEditCredentials() {
+
+        loginToPage();
+
+        String credUrl = "https://www.udacity.com";
+        String credUsername = "franksinatra";
+        String credPassword = "toTheMoon";
+        String newCredUrl = "https://www.udacity.com";
+        String newCredUsername = "franksinatra";
+        String newCredPassword = "toTheMoon123";
+
+        driver.get(baseURL + "/home");
+
+        homePageObject = new HomePageObject(driver);
+        homePageObject.goToCredentials();
+        credentialPageObject = new CredentialPageObject(driver);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        credentialPageObject.clickAddCredential();
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        credentialPageObject.addCredential(credUrl, credUsername, credPassword);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+
+        driver.get(baseURL + "/home");
+
+        homePageObject.goToCredentials();
+        credentialPageObject.clickEditCredential(0);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+
+        Assertions.assertTrue(driver.getPageSource().contains(credPassword));
+
+        credentialPageObject.editCredential(newCredUrl, newCredUsername, newCredPassword);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+
+        driver.get(baseURL + "/home");
+
+        homePageObject.goToCredentials();
+        credentialPageObject.setWait(driver);
+
+        Assertions.assertEquals(newCredUrl, credentialPageObject.getDisplayCredentialUrl().getText());
+        Assertions.assertEquals(newCredUsername, credentialPageObject.getDisplayCredentialUsername().getText());
+        Assertions.assertNotEquals(newCredPassword, credentialPageObject.getDisplayCredentialPassword().getText());
+    }
+
+    @Test
+    @Transactional
+    public void testDeleteCredentials() {
+
+        loginToPage();
+
+        String credUrl = "https://www.udacity.com";
+        String credUsername = "franksinatra";
+        String credPassword = "toTheMoon";
+
+        driver.get(baseURL + "/home");
+
+        homePageObject = new HomePageObject(driver);
+        homePageObject.goToCredentials();
+        credentialPageObject = new CredentialPageObject(driver);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        credentialPageObject.clickAddCredential();
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        credentialPageObject.addCredential(credUrl, credUsername, credPassword);
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+
+        driver.get(baseURL + "/home");
+
+        homePageObject.goToCredentials();
+        credentialPageObject.deleteCredential(0);
+
+        driver.get(baseURL + "/home");
+
+        homePageObject.goToCredentials();
+
+        Assertions.assertFalse(credentialPageObject.isCredentialPresent(driver));
+
+    }
 }

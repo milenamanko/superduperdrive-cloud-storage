@@ -33,6 +33,7 @@ public class SignupController {
         }
 
         if (signupError.equals("")) {
+
             int rowAdded = userService.createUser(user);
 
             if (rowAdded < 0) {

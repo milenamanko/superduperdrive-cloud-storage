@@ -11,7 +11,6 @@ public class NoteService {
 
     private final NotesMapper notesMapper;
 
-
     public NoteService(NotesMapper notesMapper) {
         this.notesMapper = notesMapper;
     }

@@ -76,15 +76,12 @@ public class FileController {
 
         Blob blob = new SerialBlob(file.getFileData());
 
-//        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(new InputStreamResource(file.getInputStream()));
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .contentLength(file.getFileSize())
                 .contentType(MediaType.parseMediaType(file.getContentType()))
                 .body(new InputStreamResource(blob.getBinaryStream()));
     }
-
 
     @RequestMapping(value = "/home/file/delete/{fileId}", method = RequestMethod.GET)
     public String deleteFile(@PathVariable Integer fileId, Model model) {

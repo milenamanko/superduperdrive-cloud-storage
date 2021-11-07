@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LoginController {
@@ -31,18 +30,4 @@ public class LoginController {
 
         return "login";
     }
-
-//    @PostMapping("/login")
-//    public String loginUser(@ModelAttribute User user, Model model, Authentication authentication) {
-//        String loginError = "";
-//
-//        if (!userService.isUserNameValid(user.getUsername()) || authenticationService.authenticate(authentication) != null) {
-//            loginError = "Invalid username or password";
-//        }
-//
-//        if (!loginError.equals("")) {
-//            model.addAttribute("loginError", loginError);
-//        }
-//        return "home";
-//    }
 }

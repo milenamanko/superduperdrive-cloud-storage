@@ -22,7 +22,7 @@ public class SignupPageObject {
     @FindBy(id = "submit-signup-button")
     private WebElement submitSignupButton;
 
-    public SignupPageObject (WebDriver webDriver) {
+    public SignupPageObject(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
     }
 

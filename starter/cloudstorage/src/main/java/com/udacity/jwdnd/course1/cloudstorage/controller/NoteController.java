@@ -31,18 +31,11 @@ public class NoteController {
         if (note.getNoteId() == null) {
             //add note if new
 
-            if (note.getNoteTitle().equals("")) {
-                noteError = "Please specify note title.";
-            }
+            note.setUserId(userService.getUser(authentication.getName()).getUserId());
 
-            if (noteError.equals("")) {
-
-                note.setUserId(userService.getUser(authentication.getName()).getUserId());
-
-                int noteCount = noteService.addNote(note);
-                if (noteCount < 1) {
-                    noteError = "An error has occurred while adding note. Please try again.";
-                }
+            int noteCount = noteService.addNote(note);
+            if (noteCount < 1) {
+                noteError = "An error has occurred while adding note. Please try again.";
             }
 
             if (noteError.equals("")) {
@@ -81,6 +74,7 @@ public class NoteController {
         if (noteError.equals("")) {
 
             int noteCount = noteService.deleteNoteById(noteId);
+
             if (noteCount < 1) {
                 noteError = "An error has occurred while deleting. Please try again.";
             }

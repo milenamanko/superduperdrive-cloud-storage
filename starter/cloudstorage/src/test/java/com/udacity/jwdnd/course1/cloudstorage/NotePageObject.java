@@ -10,7 +10,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class NotePageObject {
 
@@ -32,6 +31,12 @@ public class NotePageObject {
     @FindBy(id = "save-note-button")
     private WebElement saveNoteButton;
 
+    @FindBy(id = "note-title-display")
+    private WebElement displayNoteTitle;
+
+    @FindBy(id = "note-description-display")
+    private WebElement displayNoteDescription;
+
     public NotePageObject(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
     }
@@ -46,8 +51,16 @@ public class NotePageObject {
         saveNoteButton.click();
     }
 
-    public void clickEditNote(Integer noteId) {
-        editNoteButtons.get(noteId).click();
+    public WebElement getDisplayNoteTitle() {
+        return displayNoteTitle;
+    }
+
+    public WebElement getDisplayNoteDescription() {
+        return displayNoteDescription;
+    }
+
+    public void clickEditNote(Integer index) {
+        editNoteButtons.get(index).click();
     }
 
     public void editNote(String newNoteTitle, String newNoteDescription) {
@@ -58,17 +71,15 @@ public class NotePageObject {
         saveNoteButton.click();
     }
 
-    public void deleteNote(Integer noteId) {
-        deleteNoteButtons.get(noteId).click();
+    public void deleteNote(Integer index) {
+        deleteNoteButtons.get(index).click();
     }
 
     public void setWait(WebDriver driver) {
 
         WebDriverWait wait = new WebDriverWait(driver, 5);
 
-        WebElement noteTitleDisplay = driver.findElement(By.id("note-title-display"));
-        WebElement noteDescriptionDisplay = driver.findElement(By.id("note-description-display"));
-        wait.until(ExpectedConditions.visibilityOfAllElements(noteTitleDisplay, noteDescriptionDisplay));
+        wait.until(ExpectedConditions.visibilityOfAllElements(displayNoteTitle, displayNoteDescription));
     }
 
     public boolean isNotePresent(WebDriver driver) {
