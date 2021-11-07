@@ -36,7 +36,7 @@ public class FileService {
         return filesMapper.deleteFile(fileId);
     }
 
-    public int getFileCountByName(String filename) {
-        return filesMapper.getFileCount(filename);
+    public int getFileCountByName(String filename, Integer userId) {
+        return filesMapper.getFileCount(filename, userId);
     }
 }

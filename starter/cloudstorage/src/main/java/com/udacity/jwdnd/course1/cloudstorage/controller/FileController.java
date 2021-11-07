@@ -46,7 +46,7 @@ public class FileController {
             fileError = "File is empty.";
         }
 
-        if (fileService.getFileCountByName(file.getOriginalFilename()) >= 1) {
+        if (fileService.getFileCountByName(file.getOriginalFilename(), userService.getUser(authentication.getName()).getUserId()) >= 1) {
             fileError = "File with this name already exists.";
         }
 

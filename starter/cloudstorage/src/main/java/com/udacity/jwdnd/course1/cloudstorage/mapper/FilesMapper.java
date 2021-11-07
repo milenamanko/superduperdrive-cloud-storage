@@ -14,8 +14,8 @@ public interface FilesMapper {
     @Select("SELECT * FROM FILES WHERE userid = #{userId}")
     List<File> getAllFiles(Integer userId);
 
-    @Select("SELECT COUNT(*) FROM FILES WHERE filename = #{filename}")
-    int getFileCount(String filename);
+    @Select("SELECT COUNT(*) FROM FILES WHERE filename = #{filename} and userid = #{userId}")
+    int getFileCount(String filename, Integer userId);
 
     @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata)" +
             "VALUES (#{filename}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")
