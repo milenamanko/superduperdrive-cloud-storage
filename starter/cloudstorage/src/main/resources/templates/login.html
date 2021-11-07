@@ -17,8 +17,11 @@
                     <span th:text="${loginError}">
                     </span>
         </div>
-        <div id="success-logout-msg" th:if="${logoutSuccess}" class="alert alert-dark">
+        <div id="success-logout-msg" th:if="${logoutSuccess}" class="alert alert-success">
             You have been logged out
+        </div>
+        <div id="success-signup-msg" th:if="${signupSuccess}" class="alert alert-success">
+            You successfully signed up! You can login with your username and password.
         </div>
         <div th:if="${newLogin}" class="form-group">
             <label for="inputUsername">Username</label>
