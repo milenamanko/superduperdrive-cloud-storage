@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+
+    <title>Error</title>
+</head>
+<body class="p-3 mb-2 bg-light text-black">
+<div class="container justify-content-center w-25 p-3" style="background-color: #eeeeee; margin-top: 5em;">
+    <div id="errorDiv">
+        <form action="#" th:action="@{/error}" method="GET">
+            <div class="form-group" style="margin-top: 0.5em;">
+                <h1>Error</h1>
+                <div id="error-login-msg" class="alert alert-danger">
+                    <span>An error has occurred.</span>
+                </div>
+            <label><a id="login-link" th:href="@{/home}">Click here to go to homepage</a></label>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
